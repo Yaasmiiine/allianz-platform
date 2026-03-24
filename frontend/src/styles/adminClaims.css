@@ -1,0 +1,95 @@
+.admin-claims {
+  padding: 20px;
+  color: white;
+}
+
+.admin-claims h1 {
+  margin-bottom: 20px;
+}
+
+.admin-message {
+  margin-bottom: 20px;
+  color: #00c2ff;
+}
+
+.admin-claims-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.admin-claim-card {
+  background: #12264d;
+  border: 1px solid #1f3b6d;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.admin-claim-card h3 {
+  color: #00aaff;
+  margin-bottom: 12px;
+}
+
+.admin-claim-card p {
+  margin: 8px 0;
+  word-break: break-word;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+.admin-actions button {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+  background: #00aaff;
+  color: #08142b;
+}
+
+.admin-actions .reject-btn {
+  background: #ff5c5c;
+  color: white;
+}
+
+.admin-actions .pending-btn {
+  background: #ffc857;
+  color: #08142b;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.status-badge.pending {
+  background: rgba(255, 200, 87, 0.15);
+  color: #ffc857;
+}
+
+.status-badge.approved {
+  background: rgba(76, 217, 100, 0.15);
+  color: #4cd964;
+}
+
+.status-badge.rejected {
+  background: rgba(255, 92, 92, 0.15);
+  color: #ff5c5c;
+}
+
+@media (max-width: 600px) {
+  .admin-claims {
+    padding: 16px;
+  }
+
+  .admin-actions button {
+    width: 100%;
+  }
+}

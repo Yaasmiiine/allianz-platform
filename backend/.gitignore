@@ -1,0 +1,13 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Backend
+vendor/
+.env
+storage/logs/*.log
+bootstrap/cache/*.php
+
+# IDE
+.vscode/
+.idea/

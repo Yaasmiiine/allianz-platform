@@ -1,0 +1,134 @@
+.notification-wrapper {
+  position: relative;
+}
+
+.bell-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  transition: 0.25s ease;
+}
+
+.bell-btn:hover {
+  color: #33caff;
+}
+
+.notif-badge {
+  position: absolute;
+  top: -7px;
+  right: -8px;
+  background: #ff5c5c;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 999px;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 5px;
+}
+
+.notification-dropdown {
+  position: absolute;
+  top: 42px;
+  right: 0;
+  width: 350px;
+  background: #12264d;
+  border: 1px solid #1f3b6d;
+  border-radius: 14px;
+  padding: 16px;
+  z-index: 999;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.notif-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  gap: 12px;
+}
+
+.notif-header h4 {
+  margin: 0;
+  color: #00aaff;
+  font-size: 16px;
+}
+
+.notif-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.notif-actions button {
+  background: #00aaff;
+  border: none;
+  border-radius: 7px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  color: #08142b;
+  font-weight: 700;
+  transition: 0.25s ease;
+}
+
+.notif-actions button:hover {
+  background: #33caff;
+  transform: translateY(-1px);
+}
+
+.empty-notif {
+  color: #d3dbe7;
+  margin: 10px 0 0;
+}
+
+.notif-item {
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.notif-item:hover {
+  background: #163266;
+}
+
+.notif-item.unread {
+  background: rgba(0, 170, 255, 0.12);
+}
+
+.notif-item.read {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.notif-item strong {
+  display: block;
+  margin-bottom: 6px;
+  color: white;
+  font-size: 14px;
+}
+
+.notif-item p {
+  margin: 0;
+  color: #d3dbe7;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .notification-dropdown {
+    width: min(320px, calc(100vw - 24px));
+    right: 0;
+  }
+
+  .notif-actions {
+    flex-wrap: wrap;
+  }
+}

@@ -1,0 +1,70 @@
+.claims-list {
+  padding: 20px;
+  background-color: #08142b;
+  min-height: 100vh;
+  color: white;
+}
+
+.claims-list h1 {
+  margin-bottom: 30px;
+}
+
+.claims-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 10px;
+}
+
+table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+  background: #12264d;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+thead {
+  background: #0a1d3d;
+}
+
+th,
+td {
+  padding: 15px;
+  text-align: left;
+}
+
+tr {
+  border-bottom: 1px solid #1f3b6d;
+}
+
+tr:hover {
+  background: #0f2a55;
+}
+
+.status {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.status.pending {
+  background: rgba(255, 165, 0, 0.2);
+  color: orange;
+}
+
+.status.approved {
+  background: rgba(0, 255, 150, 0.2);
+  color: #00ff99;
+}
+
+.status.rejected {
+  background: rgba(255, 0, 0, 0.2);
+  color: red;
+}
+
+@media (max-width: 600px) {
+  .claims-list {
+    padding: 16px;
+  }
+}

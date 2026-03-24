@@ -1,0 +1,38 @@
+.payment-status-page {
+  min-height: 100vh;
+  background: #08142b;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 20px;
+}
+
+.payment-status-content {
+  text-align: center;
+}
+
+.payment-status-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  color: #00aaff;
+}
+
+.payment-status-content p {
+  font-size: 1.1rem;
+}
+
+.back-arrow {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  font-size: 2rem;
+  text-decoration: none;
+  color: #00aaff;
+  transition: 0.3s ease;
+}
+
+.back-arrow:hover {
+  color: white;
+}

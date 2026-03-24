@@ -1,0 +1,88 @@
+.profile {
+  padding: 40px;
+  background-color: #08142b;
+  min-height: 100vh;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile h1 {
+  margin-bottom: 28px;
+  font-size: 2.2rem;
+  width: 100%;
+  max-width: 520px;
+}
+
+.profile-card {
+  width: 100%;
+  max-width: 520px;
+  background: linear-gradient(180deg, #12264d 0%, #102245 100%);
+  padding: 32px;
+  border-radius: 16px;
+  border: 1px solid #1f3b6d;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+  box-sizing: border-box;
+}
+
+.profile-card label {
+  display: block;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #dbe7ff;
+}
+
+.profile-card input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: #0a1d3d;
+  color: white;
+  outline: none;
+  transition: 0.25s ease;
+  box-sizing: border-box;
+}
+
+.profile-card input:focus {
+  border-color: #00aaff;
+  box-shadow: 0 0 0 3px rgba(0, 170, 255, 0.12);
+}
+
+.profile-card button {
+  margin-top: 24px;
+  padding: 14px;
+  width: 100%;
+  background: #00aaff;
+  border: none;
+  border-radius: 10px;
+  color: #08142b;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.profile-card button:hover {
+  transform: translateY(-2px);
+  background: #33caff;
+  box-shadow: 0 10px 20px rgba(0, 170, 255, 0.2);
+}
+
+@media (max-width: 600px) {
+  .claims,
+  .profile {
+    padding: 20px 16px;
+  }
+
+  .claims h1,
+  .profile h1 {
+    font-size: 1.8rem;
+  }
+
+  .claims-form,
+  .profile-card {
+    padding: 22px;
+  }
+}

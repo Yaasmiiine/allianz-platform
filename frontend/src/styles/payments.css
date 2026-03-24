@@ -1,0 +1,56 @@
+.payments-page {
+  padding: 30px;
+  color: white;
+}
+
+.payments-page h1 {
+  margin-bottom: 20px;
+}
+
+.payments-section {
+  margin-top: 30px;
+}
+
+.payment-message {
+  color: #00c2ff;
+  margin-bottom: 20px;
+}
+
+.payment-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 320px));
+  gap: 20px;
+  justify-content: start;
+}
+
+.payment-card {
+  background: #12264d;
+  border: 1px solid #1f3b6d;
+  border-radius: 12px;
+  padding: 20px;
+  transition: 0.25s ease;
+}
+
+.payment-card:hover {
+  transform: translateY(-3px);
+}
+
+.payment-card h3 {
+  color: #00aaff;
+  margin-bottom: 10px;
+}
+
+.payment-card p {
+  margin: 8px 0;
+}
+
+.payment-card button {
+  margin-top: 15px;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 8px;
+  background: #00aaff;
+  color: #08142b;
+  font-weight: bold;
+  cursor: pointer;
+}

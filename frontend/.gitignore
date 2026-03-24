@@ -1,0 +1,13 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Frontend
+node_modules/
+dist/
+.env
+.vercel/
+
+# IDE
+.vscode/
+.idea/
