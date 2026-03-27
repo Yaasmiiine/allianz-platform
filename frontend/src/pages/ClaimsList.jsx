@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { API_URL, BASE_URL } from "../config";
 import "../styles/claimsList.css";
 
 function ClaimsList() {
@@ -8,13 +9,14 @@ function ClaimsList() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch("http://localhost:8000/api/claims", {
+    fetch(`${API_URL}/claims`, {
       headers: {
         Authorization: `Bearer ${token}`,
+        Accept: "application/json",
       },
     })
       .then((res) => res.json())
-      .then((data) => setClaims(data))
+      .then((data) => setClaims(Array.isArray(data) ? data : []))
       .catch((err) => console.error("FETCH CLAIMS ERROR:", err));
   }, []);
 
@@ -39,9 +41,12 @@ function ClaimsList() {
                 <tr key={claim.id}>
                   <td>{claim.id}</td>
                   <td>
-                    <a href={`/claims/${claim.id}`} style={{ color: "#00aaff", textDecoration: "none" }}>
+                    <Link
+                      to={`/claims/${claim.id}`}
+                      style={{ color: "#00aaff", textDecoration: "none" }}
+                    >
                       {claim.type}
-                    </a>
+                    </Link>
                   </td>
                   <td>{claim.amount}</td>
                   <td>
@@ -52,7 +57,7 @@ function ClaimsList() {
                   <td>
                     {claim.document ? (
                       <a
-                        href={`http://127.0.0.1:8000/storage/${claim.document}`}
+                        href={`${BASE_URL}/storage/${claim.document}`}
                         target="_blank"
                         rel="noreferrer"
                       >

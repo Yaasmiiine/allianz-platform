@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { API_URL, BASE_URL } from "../config";
 import "../styles/claimDetails.css";
 
 function ClaimDetails() {
@@ -16,7 +17,7 @@ function ClaimDetails() {
 
     const fetchClaimDetails = async () => {
       try {
-        const claimRes = await fetch(`http://127.0.0.1:8000/api/claims/${id}`, {
+        const claimRes = await fetch(`${API_URL}/claims/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
             Accept: "application/json",
@@ -32,7 +33,7 @@ function ClaimDetails() {
 
         setClaim(claimData);
 
-        const paymentsRes = await fetch("http://127.0.0.1:8000/api/payments", {
+        const paymentsRes = await fetch(`${API_URL}/payments`, {
           headers: {
             Authorization: `Bearer ${token}`,
             Accept: "application/json",
@@ -59,7 +60,9 @@ function ClaimDetails() {
   if (message) {
     return (
       <div className="claim-details-page">
-        <Link to={backPath} className="claim-back-link">← Back</Link>
+        <Link to={backPath} className="claim-back-link">
+          ← Back
+        </Link>
         <p>{message}</p>
       </div>
     );
@@ -68,7 +71,9 @@ function ClaimDetails() {
   if (!claim) {
     return (
       <div className="claim-details-page">
-        <Link to={backPath} className="claim-back-link">← Back</Link>
+        <Link to={backPath} className="claim-back-link">
+          ← Back
+        </Link>
         <p>Loading claim details...</p>
       </div>
     );
@@ -76,7 +81,9 @@ function ClaimDetails() {
 
   return (
     <div className="claim-details-page">
-      <Link to={backPath} className="claim-back-link">← Back</Link>
+      <Link to={backPath} className="claim-back-link">
+        ← Back
+      </Link>
 
       <div className="claim-details-card">
         <h1>Claim Details</h1>
@@ -113,7 +120,9 @@ function ClaimDetails() {
         {claim.user && (
           <div className="claim-section">
             <strong>Submitted By:</strong>
-            <p>{claim.user.name} ({claim.user.email})</p>
+            <p>
+              {claim.user.name} ({claim.user.email})
+            </p>
           </div>
         )}
 
@@ -122,7 +131,7 @@ function ClaimDetails() {
             <strong>Document:</strong>
             <p>
               <a
-                href={`http://127.0.0.1:8000/storage/${claim.document}`}
+                href={`${BASE_URL}/storage/${claim.document}`}
                 target="_blank"
                 rel="noreferrer"
               >
@@ -141,7 +150,11 @@ function ClaimDetails() {
               {payments.map((payment) => (
                 <li key={payment.id}>
                   ${payment.amount} -{" "}
-                  <span className={payment.status === "completed" ? "approved" : "pending"}>
+                  <span
+                    className={
+                      payment.status === "completed" ? "approved" : "pending"
+                    }
+                  >
                     {payment.status === "completed" ? "Paid" : payment.status}
                   </span>
                 </li>

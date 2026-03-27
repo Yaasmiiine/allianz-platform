@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { API_URL } from "../config";
 import "../styles/dashboard.css";
 
 function Dashboard() {
@@ -13,7 +14,7 @@ function Dashboard() {
 
     const fetchDashboardData = async () => {
       try {
-        const claimsRes = await fetch("http://127.0.0.1:8000/api/claims", {
+        const claimsRes = await fetch(`${API_URL}/claims`, {
           headers: {
             Authorization: `Bearer ${token}`,
             Accept: "application/json",
@@ -23,7 +24,7 @@ function Dashboard() {
         const claimsData = await claimsRes.json();
         setClaims(Array.isArray(claimsData) ? claimsData : []);
 
-        const paymentsRes = await fetch("http://127.0.0.1:8000/api/payments", {
+        const paymentsRes = await fetch(`${API_URL}/payments`, {
           headers: {
             Authorization: `Bearer ${token}`,
             Accept: "application/json",
@@ -89,9 +90,7 @@ function Dashboard() {
               <li key={p.id}>
                 ${p.amount} -{" "}
                 <span
-                  className={
-                    p.status === "completed" ? "approved" : "pending"
-                  }
+                  className={p.status === "completed" ? "approved" : "pending"}
                 >
                   {p.status === "completed" ? "Paid" : "Pending"}
                 </span>

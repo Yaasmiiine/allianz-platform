@@ -1,6 +1,7 @@
 // src/pages/Register.jsx
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { API_URL } from "../config";
 import "../styles/auth.css";
 
 function Register() {
@@ -20,17 +21,18 @@ function Register() {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:8000/api/register", {
+      const res = await fetch(`${API_URL}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
         body: JSON.stringify(form),
       });
 
       const data = await res.json();
       console.log("RESPONSE:", data);
-      
+
       if (res.ok) {
         alert("Account created ✅");
         navigate("/login");

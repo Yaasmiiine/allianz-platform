@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { API_URL, BASE_URL } from "../config";
 import "../styles/adminClaims.css";
 
 function AdminClaims() {
@@ -10,7 +11,7 @@ function AdminClaims() {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch("http://127.0.0.1:8000/api/claims", {
+      const res = await fetch(`${API_URL}/claims`, {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
@@ -32,7 +33,7 @@ function AdminClaims() {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch(`http://127.0.0.1:8000/api/claims/${id}/status`, {
+      const res = await fetch(`${API_URL}/claims/${id}/status`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -66,19 +67,26 @@ function AdminClaims() {
         {claims.map((claim) => (
           <div className="admin-claim-card" key={claim.id}>
             <h3>
-              <Link to={`/claims/${claim.id}`} style={{ color: "#00aaff", textDecoration: "none" }}>
-              {claim.type} 
+              <Link
+                to={`/claims/${claim.id}`}
+                style={{ color: "#00aaff", textDecoration: "none" }}
+              >
+                {claim.type}
               </Link>
             </h3>
+
             <p>
               <strong>User:</strong> {claim.user?.name} ({claim.user?.email})
             </p>
+
             <p>
               <strong>Description:</strong> {claim.description}
             </p>
+
             <p>
               <strong>Amount:</strong> ${claim.amount}
             </p>
+
             <p>
               <strong>Status:</strong>{" "}
               <span className={`status-badge ${claim.status.toLowerCase()}`}>
@@ -90,7 +98,7 @@ function AdminClaims() {
               <p>
                 <strong>Document:</strong>{" "}
                 <a
-                  href={`http://127.0.0.1:8000/storage/${claim.document}`}
+                  href={`${BASE_URL}/storage/${claim.document}`}
                   target="_blank"
                   rel="noreferrer"
                   style={{ color: "#00aaff" }}
@@ -104,12 +112,14 @@ function AdminClaims() {
               <button onClick={() => updateStatus(claim.id, "Approved")}>
                 Approve
               </button>
+
               <button
                 className="reject-btn"
                 onClick={() => updateStatus(claim.id, "Rejected")}
               >
                 Reject
               </button>
+
               <button
                 className="pending-btn"
                 onClick={() => updateStatus(claim.id, "Pending")}

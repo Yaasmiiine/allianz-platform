@@ -1,6 +1,7 @@
 // src/pages/Login.jsx
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { API_URL } from "../config";
 import "../styles/auth.css";
 
 function Login() {
@@ -15,10 +16,11 @@ function Login() {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:8000/api/login", {
+      const res = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
         body: JSON.stringify(form),
       });
@@ -27,10 +29,8 @@ function Login() {
       console.log("RESPONSE:", data);
 
       if (res.ok) {
-        // 🔐 Save token
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
-
         navigate("/dashboard");
       } else {
         alert(data.message || "Invalid credentials ❌");

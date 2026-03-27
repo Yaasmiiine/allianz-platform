@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Bell } from "lucide-react";
+import { API_URL } from "../config";
 import "../styles/notificationBell.css";
 
 function NotificationBell() {
@@ -10,7 +11,7 @@ function NotificationBell() {
 
   const fetchNotifications = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/notifications", {
+      const res = await fetch(`${API_URL}/notifications`, {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
@@ -32,7 +33,7 @@ function NotificationBell() {
 
   const markAsRead = async (id) => {
     try {
-      await fetch(`http://127.0.0.1:8000/api/notifications/${id}/read`, {
+      await fetch(`${API_URL}/notifications/${id}/read`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -48,7 +49,7 @@ function NotificationBell() {
 
   const markAllAsRead = async () => {
     try {
-      await fetch("http://127.0.0.1:8000/api/notifications/read-all", {
+      await fetch(`${API_URL}/notifications/read-all`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -64,7 +65,7 @@ function NotificationBell() {
 
   const clearAll = async () => {
     try {
-      await fetch("http://127.0.0.1:8000/api/notifications/clear-all", {
+      await fetch(`${API_URL}/notifications/clear-all`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

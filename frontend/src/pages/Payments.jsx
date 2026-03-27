@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { API_URL } from "../config";
 import "../styles/payments.css";
 
 function Payments() {
@@ -10,7 +11,7 @@ function Payments() {
 
   const fetchClaims = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/claims", {
+      const res = await fetch(`${API_URL}/claims`, {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
@@ -26,7 +27,7 @@ function Payments() {
 
   const fetchPayments = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/payments", {
+      const res = await fetch(`${API_URL}/payments`, {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
@@ -47,7 +48,7 @@ function Payments() {
 
   const handlePay = async (claimId) => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/payments/checkout", {
+      const res = await fetch(`${API_URL}/payments/checkout`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -70,13 +71,15 @@ function Payments() {
     }
   };
 
-  const alreadyStartedPaymentClaimIds = payments.map((payment) => payment.claim_id);
+  const alreadyStartedPaymentClaimIds = payments.map(
+    (payment) => payment.claim_id
+  );
 
-const approvedClaims = claims.filter(
-  (claim) =>
-    claim.status === "Approved" &&
-    !alreadyStartedPaymentClaimIds.includes(claim.id)
-);
+  const approvedClaims = claims.filter(
+    (claim) =>
+      claim.status === "Approved" &&
+      !alreadyStartedPaymentClaimIds.includes(claim.id)
+  );
 
   return (
     <div className="payments-page">
@@ -94,8 +97,12 @@ const approvedClaims = claims.filter(
             {approvedClaims.map((claim) => (
               <div className="payment-card" key={claim.id}>
                 <h3>{claim.type}</h3>
-                <p><strong>Amount:</strong> ${claim.amount}</p>
-                <p><strong>Status:</strong> {claim.status}</p>
+                <p>
+                  <strong>Amount:</strong> ${claim.amount}
+                </p>
+                <p>
+                  <strong>Status:</strong> {claim.status}
+                </p>
                 <button onClick={() => handlePay(claim.id)}>Pay Now</button>
               </div>
             ))}
@@ -112,9 +119,16 @@ const approvedClaims = claims.filter(
           <div className="payment-cards">
             {payments.map((payment) => (
               <div className="payment-card" key={payment.id}>
-                <p><strong>Claim ID:</strong> {payment.claim_id}</p>
-                <p><strong>Amount:</strong> ${payment.amount}</p>
-                <p><strong>Status:</strong> {payment.status === "completed" ? "Paid" : payment.status}</p>
+                <p>
+                  <strong>Claim ID:</strong> {payment.claim_id}
+                </p>
+                <p>
+                  <strong>Amount:</strong> ${payment.amount}
+                </p>
+                <p>
+                  <strong>Status:</strong>{" "}
+                  {payment.status === "completed" ? "Paid" : payment.status}
+                </p>
               </div>
             ))}
           </div>

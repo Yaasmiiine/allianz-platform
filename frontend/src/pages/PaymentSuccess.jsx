@@ -1,5 +1,6 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { API_URL } from "../config";
 import "../styles/paymentStatus.css";
 
 function PaymentSuccess() {
@@ -15,7 +16,7 @@ function PaymentSuccess() {
       return;
     }
 
-    fetch("http://127.0.0.1:8000/api/payments/confirm", {
+    fetch(`${API_URL}/payments/confirm`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

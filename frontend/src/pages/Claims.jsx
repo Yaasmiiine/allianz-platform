@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_URL } from "../config";
 import "../styles/claims.css";
 
 function Claims() {
@@ -47,7 +48,7 @@ function Claims() {
         formData.append("document", form.document);
       }
 
-      const res = await fetch("http://127.0.0.1:8000/api/claims", {
+      const res = await fetch(`${API_URL}/claims`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
