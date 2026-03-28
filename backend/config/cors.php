@@ -6,7 +6,10 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => [
+        'http://localhost:5173',
+        'http://allianz-platform.vercel.app',
+    ],
 
     'allowed_headers' => ['*'],
 
