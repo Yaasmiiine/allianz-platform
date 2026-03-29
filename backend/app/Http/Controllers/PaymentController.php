@@ -43,8 +43,8 @@ class PaymentController extends Controller
                 ],
                 'quantity' => 1,
             ]],
-            'success_url' => 'http://localhost:5173/payment-success?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => 'http://localhost:5173/payment-cancel',
+            'success_url' => 'https://allianz-platform.vercel.app/payment-success?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => 'https://allianz-platform.vercel.app/payment-cancel',
         ]);
 
         Payment::create([
