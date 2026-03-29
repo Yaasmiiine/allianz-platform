@@ -10,7 +10,7 @@ WORKDIR /var/www/html
 
 COPY . .
 
-RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader --no-scripts --ignore-platform-req=ext-sodium --prefer-dist --no-interaction -vvv
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader --no-scripts --ignore-platform-req=ext-sodium --prefer-dist --no-interaction
 
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
@@ -20,10 +20,13 @@ COPY apache.conf /etc/apache2/sites-available/000-default.conf
 
 EXPOSE 80
 
-CMD php artisan config:clear && \
+CMD rm -rf public/storage && \
+    php artisan config:clear && \
+    php artisan cache:clear && \
     php artisan route:clear && \
     php artisan view:clear && \
-    php artisan storage:link || true && \
+    php artisan storage:link && \
     php artisan package:discover --ansi && \
     php artisan migrate --force && \
+    chown -R www-data:www-data /var/www/html/storage /var/www/html/public/storage && \
     apache2-foreground
