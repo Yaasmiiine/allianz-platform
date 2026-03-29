@@ -12,9 +12,15 @@ COPY . .
 
 RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader --no-scripts --ignore-platform-req=ext-sodium --prefer-dist --no-interaction
 
-RUN mkdir -p /var/www/html/storage/app/public/claims \
-    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# PHP upload settings
+RUN echo "upload_max_filesize=10M" > /usr/local/etc/php/conf.d/uploads.ini && \
+    echo "post_max_size=12M" >> /usr/local/etc/php/conf.d/uploads.ini && \
+    echo "memory_limit=256M" >> /usr/local/etc/php/conf.d/uploads.ini && \
+    echo "max_file_uploads=20" >> /usr/local/etc/php/conf.d/uploads.ini
+
+RUN mkdir -p /var/www/html/storage/app/public/claims && \
+    chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache && \
+    chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 RUN a2enmod rewrite
 

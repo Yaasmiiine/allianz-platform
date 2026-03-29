@@ -24,7 +24,7 @@ class ClaimController extends Controller
         'type' => 'required|string',
         'description' => 'required|string',
         'amount' => 'required|numeric',
-        'document' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'document' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
     ]);
 
     $documentPath = null;
