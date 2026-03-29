@@ -12,7 +12,9 @@ COPY . .
 
 RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader --no-scripts --ignore-platform-req=ext-sodium --prefer-dist --no-interaction
 
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN mkdir -p /var/www/html/storage/app/public/claims \
+    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 RUN a2enmod rewrite
 
@@ -29,4 +31,5 @@ CMD rm -rf public/storage && \
     php artisan package:discover --ansi && \
     php artisan migrate --force && \
     chown -R www-data:www-data /var/www/html/storage /var/www/html/public/storage && \
+    chmod -R 775 /var/www/html/storage /var/www/html/public/storage && \
     apache2-foreground
