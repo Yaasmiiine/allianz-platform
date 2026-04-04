@@ -43,13 +43,8 @@ class PaymentController extends Controller
                 ],
                 'quantity' => 1,
             ]],
-<<<<<<< HEAD
-            'success_url' => 'https://allianz-platform.vercel.app/payment-success?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => 'https://allianz-platform.vercel.app/payment-cancel',
-=======
             'success_url' => env('FRONTEND_URL') . '/payment-success?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => env('FRONTEND_URL') . '/payment-cancel',
->>>>>>> 49fc45b (Minor change)
         ]);
 
         Payment::create([
@@ -66,53 +61,51 @@ class PaymentController extends Controller
     }
 
     public function confirmPayment(Request $request)
-{
-    $request->validate([
-        'session_id' => 'required|string',
-    ]);
-
-    Stripe::setApiKey(env('STRIPE_SECRET'));
-
-    $session = \Stripe\Checkout\Session::retrieve($request->session_id);
-
-    $payment = Payment::where('stripe_session_id', $request->session_id)->first();
-
-    if (!$payment) {
-        return response()->json(['message' => 'Payment not found'], 404);
-    }
-
-    if ($session->payment_status === 'paid') {
-        $payment->status = 'completed';
-        $payment->save();
-
-        // Notification for client
-        Notification::create([
-            'user_id' => $payment->user_id,
-            'title' => 'Payment Completed',
-            'message' => 'Your payment for claim #' . $payment->claim_id . ' has been completed successfully.',
+    {
+        $request->validate([
+            'session_id' => 'required|string',
         ]);
 
-        // Notifications for all admins
-        $admins = User::where('role', 'admin')->get();
+        Stripe::setApiKey(env('STRIPE_SECRET'));
 
-        foreach ($admins as $admin) {
+        $session = \Stripe\Checkout\Session::retrieve($request->session_id);
+
+        $payment = Payment::where('stripe_session_id', $request->session_id)->first();
+
+        if (!$payment) {
+            return response()->json(['message' => 'Payment not found'], 404);
+        }
+
+        if ($session->payment_status === 'paid') {
+            $payment->status = 'completed';
+            $payment->save();
+
             Notification::create([
-                'user_id' => $admin->id,
-                'title' => 'Claim Payment Received',
-                'message' => 'A client has completed payment for claim #' . $payment->claim_id . '.',
+                'user_id' => $payment->user_id,
+                'title' => 'Payment Completed',
+                'message' => 'Your payment for claim #' . $payment->claim_id . ' has been completed successfully.',
+            ]);
+
+            $admins = User::where('role', 'admin')->get();
+
+            foreach ($admins as $admin) {
+                Notification::create([
+                    'user_id' => $admin->id,
+                    'title' => 'Claim Payment Received',
+                    'message' => 'A client has completed payment for claim #' . $payment->claim_id . '.',
+                ]);
+            }
+
+            return response()->json([
+                'message' => 'Payment confirmed successfully',
+                'payment' => $payment,
             ]);
         }
 
         return response()->json([
-            'message' => 'Payment confirmed successfully',
-            'payment' => $payment,
-        ]);
+            'message' => 'Payment not completed',
+        ], 400);
     }
-
-    return response()->json([
-        'message' => 'Payment not completed',
-    ], 400);
-}
 
     public function index(Request $request)
     {
