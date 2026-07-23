@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { API_URL, BASE_URL } from "../config";
+import { BASE_URL } from "../config";
+import { getClaim } from "../api/claims";
+import { getPayments } from "../api/payments";
 import "../styles/claimDetails.css";
 
 function ClaimDetails() {
@@ -13,48 +15,17 @@ function ClaimDetails() {
   const backPath = user?.role === "admin" ? "/admin-claims" : "/claims-list";
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    const fetchClaimDetails = async () => {
-      try {
-        const claimRes = await fetch(`${API_URL}/claims/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-          },
-        });
-
-        const claimData = await claimRes.json();
-
-        if (!claimRes.ok) {
-          setMessage(claimData.message || "Unable to load claim details");
-          return;
-        }
-
-        setClaim(claimData);
-
-        const paymentsRes = await fetch(`${API_URL}/payments`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-          },
-        });
-
-        const paymentsData = await paymentsRes.json();
-
-        if (Array.isArray(paymentsData)) {
-          const relatedPayments = paymentsData.filter(
-            (payment) => payment.claim_id === Number(id)
-          );
-          setPayments(relatedPayments);
-        }
-      } catch (error) {
-        console.error("CLAIM DETAILS ERROR:", error);
-        setMessage("Server error while loading claim details");
-      }
-    };
-
-    fetchClaimDetails();
+    getClaim(id)
+      .then(({ data }) => {
+        setClaim(data);
+        return getPayments({ claim_id: id });
+      })
+      .then((paymentsRes) => {
+        setPayments(Array.isArray(paymentsRes?.data) ? paymentsRes.data : []);
+      })
+      .catch((error) => {
+        setMessage(error.response?.data?.message || "Unable to load claim details");
+      });
   }, [id]);
 
   if (message) {
@@ -106,7 +77,7 @@ function ClaimDetails() {
 
           <div>
             <strong>Status:</strong>
-            <p className={`claim-status ${claim.status.toLowerCase()}`}>
+            <p className={`claim-status ${(claim.status ?? "").toLowerCase()}`}>
               {claim.status}
             </p>
           </div>

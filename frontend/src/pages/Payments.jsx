@@ -1,85 +1,67 @@
 import { useEffect, useState } from "react";
-import { API_URL } from "../config";
+import { getClaims } from "../api/claims";
+import { getPayments, checkout } from "../api/payments";
+import Spinner from "../components/Spinner";
 import "../styles/payments.css";
 
 function Payments() {
   const [claims, setClaims] = useState([]);
   const [payments, setPayments] = useState([]);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  const token = localStorage.getItem("token");
+  const fetchData = () => {
+    setLoading(true);
 
-  const fetchClaims = async () => {
-    try {
-      const res = await fetch(`${API_URL}/claims`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      });
-
-      const data = await res.json();
-      setClaims(Array.isArray(data) ? data : []);
-    } catch (error) {
-      console.error("FETCH CLAIMS ERROR:", error);
-    }
-  };
-
-  const fetchPayments = async () => {
-    try {
-      const res = await fetch(`${API_URL}/payments`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      });
-
-      const data = await res.json();
-      setPayments(Array.isArray(data) ? data : []);
-    } catch (error) {
-      console.error("FETCH PAYMENTS ERROR:", error);
-    }
+    return Promise.all([
+      getClaims({ status: "Approved", per_page: 100 }),
+      getPayments(),
+    ])
+      .then(([claimsRes, paymentsRes]) => {
+        setClaims(claimsRes.data.data ?? []);
+        setPayments(paymentsRes.data.data ?? []);
+      })
+      .catch(() => {
+        setClaims([]);
+        setPayments([]);
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
-    fetchClaims();
-    fetchPayments();
+    fetchData();
   }, []);
 
   const handlePay = async (claimId) => {
     try {
-      const res = await fetch(`${API_URL}/payments/checkout`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-        body: JSON.stringify({ claim_id: claimId }),
-      });
+      const { data } = await checkout(claimId);
 
-      const data = await res.json();
-
-      if (res.ok && data.url) {
+      if (data.url) {
         window.location.href = data.url;
       } else {
-        setMessage(data.message || "Unable to start payment");
+        setMessage("Unable to start payment");
       }
     } catch (error) {
-      console.error("PAYMENT ERROR:", error);
-      setMessage("Server error while starting payment");
+      setMessage(error.response?.data?.message || "Server error while starting payment");
     }
   };
 
-  const alreadyStartedPaymentClaimIds = payments.map(
-    (payment) => payment.claim_id
-  );
+  const completedPaymentClaimIds = payments
+    .filter((payment) => payment.status === "completed")
+    .map((payment) => payment.claim_id);
 
   const approvedClaims = claims.filter(
-    (claim) =>
-      claim.status === "Approved" &&
-      !alreadyStartedPaymentClaimIds.includes(claim.id)
+    (claim) => !completedPaymentClaimIds.includes(claim.id)
   );
+
+  if (loading) {
+    return (
+      <div className="payments-page">
+        <h1>Payments</h1>
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className="payments-page">

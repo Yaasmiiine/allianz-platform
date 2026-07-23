@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { API_URL } from "../config";
+import { createClaim } from "../api/claims";
 import "../styles/claims.css";
 
 function Claims() {
@@ -11,6 +11,7 @@ function Claims() {
   });
 
   const [message, setMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -36,9 +37,9 @@ function Claims() {
       return;
     }
 
-    try {
-      const token = localStorage.getItem("token");
+    setSubmitting(true);
 
+    try {
       const formData = new FormData();
       formData.append("type", form.type);
       formData.append("description", form.description);
@@ -48,35 +49,24 @@ function Claims() {
         formData.append("document", form.document);
       }
 
-      const res = await fetch(`${API_URL}/claims`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-        body: formData,
+      await createClaim(formData);
+
+      setMessage("Claim submitted successfully!");
+      setForm({
+        type: "",
+        description: "",
+        amount: "",
+        document: null,
       });
 
-      const data = await res.json();
-      console.log("CLAIM RESPONSE:", data);
-
-      if (res.ok) {
-        setMessage("Claim submitted successfully!");
-        setForm({
-          type: "",
-          description: "",
-          amount: "",
-          document: null,
-        });
-
-        const fileInput = document.getElementById("document");
-        if (fileInput) fileInput.value = "";
-      } else {
-        setMessage(data.message || "Error submitting claim");
-      }
+      const fileInput = document.getElementById("document");
+      if (fileInput) fileInput.value = "";
     } catch (err) {
-      console.error("CLAIM ERROR:", err);
-      setMessage("Error submitting claim");
+      const errors = err.response?.data?.errors;
+      const firstError = errors ? Object.values(errors)[0]?.[0] : null;
+      setMessage(firstError || err.response?.data?.message || "Error submitting claim");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -117,7 +107,9 @@ function Claims() {
           onChange={handleChange}
         />
 
-        <button type="submit">Submit Claim</button>
+        <button type="submit" disabled={submitting}>
+          {submitting ? "Submitting..." : "Submit Claim"}
+        </button>
 
         {message && <p className="message">{message}</p>}
       </form>

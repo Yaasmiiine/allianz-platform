@@ -4,7 +4,7 @@ import Sidebar from "./Sidebar";
 import "../styles/layout.css";
 
 function Layout({ children }) {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(() => window.innerWidth > 768);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);

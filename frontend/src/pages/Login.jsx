@@ -1,11 +1,13 @@
 // src/pages/Login.jsx
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { API_URL } from "../config";
+import { login } from "../api/auth";
 import "../styles/auth.css";
 
 function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
+  const [message, setMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -14,30 +16,18 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setMessage("");
+    setSubmitting(true);
 
     try {
-      const res = await fetch(`${API_URL}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(form),
-      });
-
-      const data = await res.json();
-      console.log("RESPONSE:", data);
-
-      if (res.ok) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
-        navigate("/dashboard");
-      } else {
-        alert(data.message || "Invalid credentials ❌");
-      }
+      const { data } = await login(form.email, form.password);
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      navigate("/dashboard");
     } catch (error) {
-      console.error("FULL ERROR:", error);
-      alert("Check console ❗");
+      setMessage(error.response?.data?.message || "Invalid credentials");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -62,7 +52,11 @@ function Login() {
           required
         />
 
-        <button type="submit">Login</button>
+        <button type="submit" disabled={submitting}>
+          {submitting ? "Logging in..." : "Login"}
+        </button>
+
+        {message && <p className="message">{message}</p>}
 
         <p>
           Don’t have an account? <Link to="/register">Register</Link>

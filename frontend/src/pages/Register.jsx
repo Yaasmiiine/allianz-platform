@@ -1,7 +1,7 @@
 // src/pages/Register.jsx
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { API_URL } from "../config";
+import { register } from "../api/auth";
 import "../styles/auth.css";
 
 function Register() {
@@ -9,7 +9,10 @@ function Register() {
     name: "",
     email: "",
     password: "",
+    passwordConfirmation: "",
   });
+  const [message, setMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const navigate = useNavigate();
 
@@ -19,30 +22,32 @@ function Register() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setMessage("");
+
+    if (form.password !== form.passwordConfirmation) {
+      setMessage("Passwords do not match");
+      return;
+    }
+
+    setSubmitting(true);
 
     try {
-      const res = await fetch(`${API_URL}/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(form),
-      });
+      const { data } = await register(
+        form.name,
+        form.email,
+        form.password,
+        form.passwordConfirmation
+      );
 
-      const data = await res.json();
-      console.log("RESPONSE:", data);
-
-      if (res.ok) {
-        alert("Account created ✅");
-        navigate("/login");
-      } else {
-        alert("Registration failed ❌");
-        console.log(data);
-      }
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      navigate("/dashboard");
     } catch (error) {
-      console.error("FULL ERROR:", error);
-      alert("Check console ❗");
+      const errors = error.response?.data?.errors;
+      const firstError = errors ? Object.values(errors)[0]?.[0] : null;
+      setMessage(firstError || error.response?.data?.message || "Registration failed");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -75,7 +80,19 @@ function Register() {
           required
         />
 
-        <button type="submit">Register</button>
+        <input
+          type="password"
+          name="passwordConfirmation"
+          placeholder="Confirm Password"
+          onChange={handleChange}
+          required
+        />
+
+        <button type="submit" disabled={submitting}>
+          {submitting ? "Creating account..." : "Register"}
+        </button>
+
+        {message && <p className="message">{message}</p>}
 
         <p>
           Already have an account? <Link to="/login">Login</Link>

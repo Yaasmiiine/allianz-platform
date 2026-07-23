@@ -1,81 +1,61 @@
 import { useEffect, useState } from "react";
 import { Bell } from "lucide-react";
-import { API_URL } from "../config";
+import {
+  getNotifications,
+  markAsRead as markAsReadApi,
+  markAllAsRead as markAllAsReadApi,
+  clearAll as clearAllApi,
+} from "../api/notifications";
 import "../styles/notificationBell.css";
+
+const POLL_INTERVAL_MS = 30000;
 
 function NotificationBell() {
   const [notifications, setNotifications] = useState([]);
   const [open, setOpen] = useState(false);
 
-  const token = localStorage.getItem("token");
-
   const fetchNotifications = async () => {
     try {
-      const res = await fetch(`${API_URL}/notifications`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      });
-
-      const data = await res.json();
+      const { data } = await getNotifications();
       setNotifications(Array.isArray(data) ? data : []);
-    } catch (error) {
-      console.error("FETCH NOTIFICATIONS ERROR:", error);
+    } catch {
+      // silently ignore — the bell just keeps its last known state
     }
   };
 
   useEffect(() => {
     fetchNotifications();
+
+    const interval = setInterval(fetchNotifications, POLL_INTERVAL_MS);
+    return () => clearInterval(interval);
   }, []);
 
   const unreadCount = notifications.filter((n) => !n.is_read).length;
 
   const markAsRead = async (id) => {
     try {
-      await fetch(`${API_URL}/notifications/${id}/read`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      });
-
+      await markAsReadApi(id);
       fetchNotifications();
-    } catch (error) {
-      console.error("MARK READ ERROR:", error);
+    } catch {
+      // ignore — next poll will reconcile state
     }
   };
 
   const markAllAsRead = async () => {
     try {
-      await fetch(`${API_URL}/notifications/read-all`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      });
-
+      await markAllAsReadApi();
       fetchNotifications();
-    } catch (error) {
-      console.error("MARK ALL READ ERROR:", error);
+    } catch {
+      // ignore — next poll will reconcile state
     }
   };
 
   const clearAll = async () => {
     try {
-      await fetch(`${API_URL}/notifications/clear-all`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      });
-
+      await clearAllApi();
       fetchNotifications();
-    } catch (error) {
-      console.error("CLEAR ALL NOTIFICATIONS ERROR:", error);
+    } catch {
+      // ignore — next poll will reconcile state
     }
   };
 

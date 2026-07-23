@@ -15,7 +15,7 @@ function Sidebar({ isOpen, toggleSidebar }) {
 
   try {
     user = JSON.parse(localStorage.getItem("user"));
-  } catch (error) {
+  } catch {
     user = null;
   }
 

@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminRoute from "./components/AdminRoute";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
@@ -55,7 +56,14 @@ function App() {
                   <Route path="/claims-list" element={<ClaimsList />} />
                   <Route path="/claims/:id" element={<ClaimDetails />} />
                   <Route path="/payments" element={<Payments />} />
-                  <Route path="/admin-claims" element={<AdminClaims />} />
+                  <Route
+                    path="/admin-claims"
+                    element={
+                      <AdminRoute>
+                        <AdminClaims />
+                      </AdminRoute>
+                    }
+                  />
                 </Routes>
               </Layout>
             </ProtectedRoute>

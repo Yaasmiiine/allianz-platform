@@ -1,41 +1,39 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { API_URL } from "../config";
+import { CheckCircle2, Loader2, XCircle } from "lucide-react";
+import { confirmPayment } from "../api/payments";
 import "../styles/paymentStatus.css";
 
 function PaymentSuccess() {
   const [searchParams] = useSearchParams();
   const [message, setMessage] = useState("Confirming your payment...");
+  const [status, setStatus] = useState("pending");
 
   useEffect(() => {
     const sessionId = searchParams.get("session_id");
-    const token = localStorage.getItem("token");
 
     if (!sessionId) {
       setMessage("Missing payment session.");
+      setStatus("error");
       return;
     }
 
-    fetch(`${API_URL}/payments/confirm`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ session_id: sessionId }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.message === "Payment confirmed successfully") {
+    confirmPayment(sessionId)
+      .then(({ data }) => {
+        if (
+          data.message === "Payment confirmed successfully" ||
+          data.message === "Payment already confirmed"
+        ) {
           setMessage("Your payment has been completed successfully.");
+          setStatus("success");
         } else {
           setMessage(data.message || "Unable to confirm payment.");
+          setStatus("error");
         }
       })
-      .catch((err) => {
-        console.error("PAYMENT CONFIRM ERROR:", err);
-        setMessage("Error confirming payment.");
+      .catch((error) => {
+        setMessage(error.response?.data?.message || "Error confirming payment.");
+        setStatus("error");
       });
   }, [searchParams]);
 
@@ -46,6 +44,12 @@ function PaymentSuccess() {
       </Link>
 
       <div className="payment-status-content">
+        <div className={`status-icon ${status}`}>
+          {status === "pending" && <Loader2 size={56} className="spin-icon" />}
+          {status === "success" && <CheckCircle2 size={56} />}
+          {status === "error" && <XCircle size={56} />}
+        </div>
+
         <h1>Payment Successful</h1>
         <p>{message}</p>
       </div>
