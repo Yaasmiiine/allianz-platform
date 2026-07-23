@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CheckoutRequest;
+use App\Http\Requests\ConfirmPaymentRequest;
+use App\Mail\PaymentCompletedMail;
 use App\Models\Claim;
 use App\Models\User;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use App\Models\Notification;
+use Illuminate\Support\Facades\Mail;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 
 class PaymentController extends Controller
 {
-    public function createCheckoutSession(Request $request)
+    public function createCheckoutSession(CheckoutRequest $request)
     {
-        $request->validate([
-            'claim_id' => 'required|exists:claims,id',
-        ]);
-
-        $claim = Claim::findOrFail($request->claim_id);
+        $claim = Claim::findOrFail($request->validated('claim_id'));
 
         if ($claim->user_id !== $request->user()->id) {
             return response()->json(['message' => 'Unauthorized'], 403);
@@ -60,21 +60,24 @@ class PaymentController extends Controller
         ]);
     }
 
-    public function confirmPayment(Request $request)
+    public function confirmPayment(ConfirmPaymentRequest $request)
     {
-        $request->validate([
-            'session_id' => 'required|string',
-        ]);
-
-        Stripe::setApiKey(env('STRIPE_SECRET'));
-
-        $session = \Stripe\Checkout\Session::retrieve($request->session_id);
-
-        $payment = Payment::where('stripe_session_id', $request->session_id)->first();
+        $payment = Payment::where('stripe_session_id', $request->validated('session_id'))->first();
 
         if (!$payment) {
             return response()->json(['message' => 'Payment not found'], 404);
         }
+
+        if ($payment->status === 'completed') {
+            return response()->json([
+                'message' => 'Payment already confirmed',
+                'payment' => $payment,
+            ]);
+        }
+
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        $session = Session::retrieve($request->validated('session_id'));
 
         if ($session->payment_status === 'paid') {
             $payment->status = 'completed';
@@ -85,6 +88,8 @@ class PaymentController extends Controller
                 'title' => 'Payment Completed',
                 'message' => 'Your payment for claim #' . $payment->claim_id . ' has been completed successfully.',
             ]);
+
+            Mail::to($payment->user->email)->send(new PaymentCompletedMail($payment));
 
             $admins = User::where('role', 'admin')->get();
 
@@ -109,10 +114,16 @@ class PaymentController extends Controller
 
     public function index(Request $request)
     {
-        if ($request->user()->role === 'admin') {
-            return Payment::with('user', 'claim')->latest()->get();
+        $query = $request->user()->role === 'admin'
+            ? Payment::with('user', 'claim')
+            : $request->user()->payments()->with('claim');
+
+        if ($claimId = $request->query('claim_id')) {
+            return $query->where('claim_id', $claimId)->latest()->get();
         }
 
-        return $request->user()->payments()->latest()->get();
+        $perPage = min((int) $request->query('per_page', 15), 100);
+
+        return $query->latest()->paginate($perPage)->withQueryString();
     }
 }

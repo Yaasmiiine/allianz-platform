@@ -7,6 +7,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClaimController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StatsController;
 
 // ✅ TEST ROUTE
 Route::get('/test-db', function () {
@@ -15,19 +17,28 @@ Route::get('/test-db', function () {
 });
 
 // ✅ AUTH ROUTES
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::middleware('throttle:auth')->group(function () {
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+});
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
 
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::put('/profile', [ProfileController::class, 'update']);
+
+    Route::get('/stats', [StatsController::class, 'index']);
+
     Route::get('/claims', [ClaimController::class, 'index']);
     Route::get('/claims/{id}', [ClaimController::class, 'show']);
     Route::post('/claims', [ClaimController::class, 'store']);
-    Route::put('/claims/{id}/status', [ClaimController::class, 'updateStatus']);
 
+    Route::middleware('admin')->group(function () {
+        Route::put('/claims/{id}/status', [ClaimController::class, 'updateStatus']);
+    });
 
     Route::get('/payments', [PaymentController::class, 'index']);
     Route::post('/payments/checkout', [PaymentController::class, 'createCheckoutSession']);

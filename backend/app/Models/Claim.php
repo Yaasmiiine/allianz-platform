@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Claim extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
     'type',
     'description',
@@ -14,6 +17,13 @@ class Claim extends Model
     'document',
     'user_id',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'amount' => 'decimal:2',
+        ];
+    }
 
     public function user()
     {

@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'user_id',
         'claim_id',
@@ -13,6 +16,13 @@ class Payment extends Model
         'status',
         'stripe_session_id',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'amount' => 'decimal:2',
+        ];
+    }
 
     public function user()
     {
