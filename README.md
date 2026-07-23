@@ -86,6 +86,8 @@ project-root/
 ## Screenshots
 
 ![Home Page](./screenshots/home-page.png)
+![Login](./screenshots/login-page.png)
+![Register](./screenshots/register-page.png)
 ![Client Dashboard](./screenshots/dashboard.png)
 ![Claim Submission Form](./screenshots/submit-claim.png)
 ![Claims List](./screenshots/claims-list.png)
@@ -139,10 +141,12 @@ cd backend
 composer install
 cp .env.example .env
 php artisan key:generate
-php artisan migrate
+php artisan migrate --seed
 php artisan storage:link
 php artisan serve
 ```
+
+`--seed` creates two accounts for local testing: `admin@example.com` (role `admin`) and `test@example.com` (role `client`, with a few demo claims), both using the default factory password (`password`).
 
 ### Backend Environment Variables
 
@@ -157,6 +161,8 @@ APP_URL=http://127.0.0.1:8000
 
 FRONTEND_URL=http://localhost:5173
 FILESYSTEM_DISK=public
+SANCTUM_STATEFUL_DOMAINS=localhost:5173
+MAIL_MAILER=log
 
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -244,15 +250,22 @@ When deployed on **Render free plan**, uploaded files may not persist after rede
 - Refresh `/payment-success`
 - Verify direct opening of uploaded files
 
+## Recent Upgrades
+
+- Server-side validation (FormRequest classes) for register/login/claims/payments/profile, replacing unvalidated raw input
+- Rate limiting on `/register` and `/login`, admin-only route middleware, Sanctum token expiration + a real `/logout` endpoint
+- Idempotent payment confirmation and a unique DB index on Stripe session IDs
+- Dashboard statistics endpoint with charts (claims by status, 6-month trend)
+- Search, filtering, and pagination for the claims list (status, type, description)
+- Email notifications (via Laravel Mail, `log` driver by default) alongside in-app notifications
+- A shared axios API client on the frontend (replacing ad hoc `fetch` calls scattered across pages), with automatic logout on an expired/invalid token
+- PHPUnit feature tests covering auth, claims, payments, and profile endpoints
+
 ## Future Improvements
 
-- Email notifications
-- Search and filtering for claims
-- Dashboard statistics and analytics
-- Better validation and exception handling
-- Cloud file storage integration
-- Automated testing with Playwright or PHPUnit
-- Improved UI/UX and responsiveness
+- Cloud file storage integration (S3/Cloudinary) to replace the ephemeral local disk on free-tier hosts
+- Playwright end-to-end tests for the frontend
+- A real LLM-backed chatbot (currently a static keyword-matcher)
 
 ## Educational Value
 
