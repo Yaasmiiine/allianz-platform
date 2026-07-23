@@ -1,0 +1,31 @@
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+  color: white;
+  animation: fadeIn 0.4s ease both;
+}
+
+.pagination button {
+  padding: 8px 14px;
+  background: #00aaff;
+  border: none;
+  border-radius: 6px;
+  color: #08142b;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: #33caff;
+  box-shadow: 0 8px 16px rgba(0, 170, 255, 0.25);
+}
+
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

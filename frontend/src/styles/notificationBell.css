@@ -10,11 +10,15 @@
   position: relative;
   display: flex;
   align-items: center;
-  transition: 0.25s ease;
+  transition: color 0.25s ease, transform 0.2s ease;
 }
 
 .bell-btn:hover {
   color: #33caff;
+}
+
+.bell-btn:active {
+  transform: scale(0.9) rotate(-8deg);
 }
 
 .notif-badge {
@@ -32,6 +36,7 @@
   align-items: center;
   justify-content: center;
   padding: 2px 5px;
+  animation: pulseBadge 1.8s ease-in-out infinite;
 }
 
 .notification-dropdown {
@@ -45,6 +50,8 @@
   padding: 16px;
   z-index: 999;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  transform-origin: top right;
+  animation: scaleIn 0.2s ease both;
 }
 
 .notif-header {
@@ -93,11 +100,13 @@
   border-radius: 12px;
   margin-bottom: 10px;
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: background 0.2s ease, transform 0.15s ease;
+  animation: fadeSlideUp 0.3s ease both;
 }
 
 .notif-item:hover {
   background: #163266;
+  transform: translateX(2px);
 }
 
 .notif-item.unread {

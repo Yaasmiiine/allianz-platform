@@ -1,6 +1,7 @@
 .payments-page {
   padding: 30px;
   color: white;
+  animation: fadeSlideUp 0.5s ease both;
 }
 
 .payments-page h1 {
@@ -14,6 +15,7 @@
 .payment-message {
   color: #00c2ff;
   margin-bottom: 20px;
+  animation: fadeIn 0.3s ease both;
 }
 
 .payment-cards {
@@ -28,11 +30,30 @@
   border: 1px solid #1f3b6d;
   border-radius: 12px;
   padding: 20px;
-  transition: 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  animation: fadeSlideUp 0.45s ease both;
 }
 
 .payment-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-5px);
+  border-color: #2a4d85;
+  box-shadow: 0 12px 26px rgba(0, 170, 255, 0.15);
+}
+
+.payment-cards .payment-card:nth-child(1) {
+  animation-delay: 0.04s;
+}
+
+.payment-cards .payment-card:nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.payment-cards .payment-card:nth-child(3) {
+  animation-delay: 0.12s;
+}
+
+.payment-cards .payment-card:nth-child(4) {
+  animation-delay: 0.16s;
 }
 
 .payment-card h3 {
@@ -53,4 +74,11 @@
   color: #08142b;
   font-weight: bold;
   cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.payment-card button:hover {
+  transform: translateY(-2px);
+  background: #33caff;
+  box-shadow: 0 8px 18px rgba(0, 170, 255, 0.25);
 }

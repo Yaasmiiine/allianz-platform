@@ -24,6 +24,7 @@
   border: 1px solid #1f3b6d;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
   box-sizing: border-box;
+  animation: fadeSlideUp 0.5s ease both;
 }
 
 .profile-card label {
@@ -68,6 +69,18 @@
   transform: translateY(-2px);
   background: #33caff;
   box-shadow: 0 10px 20px rgba(0, 170, 255, 0.2);
+}
+
+.profile-card button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.profile-message {
+  margin-top: 16px;
+  color: #4cd964;
+  animation: popIn 0.35s ease both;
 }
 
 @media (max-width: 600px) {

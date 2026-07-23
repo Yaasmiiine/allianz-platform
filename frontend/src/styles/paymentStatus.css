@@ -11,6 +11,7 @@
 
 .payment-status-content {
   text-align: center;
+  animation: fadeSlideUp 0.5s ease both;
 }
 
 .payment-status-content h1 {
@@ -21,6 +22,45 @@
 
 .payment-status-content p {
   font-size: 1.1rem;
+}
+
+.status-icon {
+  width: 88px;
+  height: 88px;
+  margin: 0 auto 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: popIn 0.5s ease both;
+}
+
+.status-icon.success {
+  background: rgba(76, 217, 100, 0.15);
+  color: #4cd964;
+}
+
+.status-icon.error {
+  background: rgba(255, 92, 92, 0.15);
+  color: #ff5c5c;
+}
+
+.status-icon.pending {
+  background: rgba(0, 170, 255, 0.15);
+  color: #00aaff;
+}
+
+.spin-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .back-arrow {
@@ -35,4 +75,5 @@
 
 .back-arrow:hover {
   color: white;
+  transform: translateX(-4px);
 }

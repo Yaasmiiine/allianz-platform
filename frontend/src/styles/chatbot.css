@@ -14,7 +14,24 @@
   color: #08142b;
   font-size: 24px;
   cursor: pointer;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(0, 170, 255, 0.5);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  animation: chatbotBreathe 2.8s ease-in-out infinite;
+}
+
+.chatbot-toggle:hover {
+  transform: translateY(-3px) scale(1.05);
+  animation-play-state: paused;
+}
+
+@keyframes chatbotBreathe {
+  0%,
+  100% {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(0, 170, 255, 0.35);
+  }
+  50% {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 0 10px rgba(0, 170, 255, 0);
+  }
 }
 
 .chatbot-box {
@@ -27,6 +44,8 @@
   flex-direction: column;
   margin-bottom: 15px;
   overflow: hidden;
+  transform-origin: bottom right;
+  animation: scaleIn 0.25s ease both;
 }
 
 .chatbot-header {
@@ -61,6 +80,7 @@
   border-radius: 12px;
   line-height: 1.5;
   font-size: 14px;
+  animation: fadeSlideUp 0.25s ease both;
 }
 
 .chat-message.bot {
@@ -84,11 +104,18 @@
 
 .chatbot-input input {
   flex: 1;
-  border: none;
+  border: 1px solid transparent;
   border-radius: 8px;
   padding: 10px;
   background: #08142b;
   color: white;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.chatbot-input input:focus {
+  outline: none;
+  border-color: #00aaff;
+  box-shadow: 0 0 0 3px rgba(0, 170, 255, 0.15);
 }
 
 .chatbot-input button {
@@ -99,6 +126,21 @@
   color: #08142b;
   font-weight: bold;
   cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.chatbot-input button:hover {
+  transform: translateY(-2px);
+  background: #33caff;
+}
+
+.chatbot-header button {
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.chatbot-header button:hover {
+  color: #ff6b6b;
+  transform: rotate(90deg);
 }
 
 @media (max-width: 600px) {

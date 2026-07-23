@@ -1,0 +1,29 @@
+.claims-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+  animation: fadeSlideUp 0.4s ease both;
+}
+
+.claims-filters select,
+.claims-filters input {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: #12264d;
+  color: white;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.claims-filters select:focus,
+.claims-filters input:focus {
+  outline: none;
+  border-color: #00aaff;
+  box-shadow: 0 0 0 3px rgba(0, 170, 255, 0.12);
+}
+
+.claims-filters input {
+  flex: 1;
+  min-width: 180px;
+}

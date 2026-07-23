@@ -25,6 +25,7 @@
   border: 1px solid #1f3b6d;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
   box-sizing: border-box;
+  animation: fadeSlideUp 0.5s ease both;
 }
 
 .claims-form label {
@@ -92,6 +93,7 @@
   margin-top: 16px;
   font-weight: 600;
   color: #dbe7ff;
+  animation: fadeIn 0.3s ease both;
 }
 
 @media (max-width: 600px) {

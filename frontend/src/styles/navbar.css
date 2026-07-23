@@ -12,6 +12,18 @@
   top: 0;
   z-index: 100;
   gap: 12px;
+  animation: fadeSlideDown 0.4s ease both;
+}
+
+@keyframes fadeSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .navbar-left {
@@ -27,12 +39,13 @@
   border: none;
   color: white;
   cursor: pointer;
-  transition: 0.25s ease;
+  transition: color 0.25s ease, transform 0.25s ease;
   flex-shrink: 0;
 }
 
 .menu-btn:hover {
   color: #33caff;
+  transform: rotate(90deg);
 }
 
 .logo {

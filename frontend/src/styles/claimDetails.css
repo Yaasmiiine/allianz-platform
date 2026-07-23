@@ -1,6 +1,7 @@
 .claim-details-page {
   padding: 30px;
   color: white;
+  animation: fadeSlideUp 0.5s ease both;
 }
 
 .claim-back-link {
@@ -9,6 +10,12 @@
   color: #00aaff;
   text-decoration: none;
   font-size: 18px;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.claim-back-link:hover {
+  color: #33caff;
+  transform: translateX(-3px);
 }
 
 .claim-details-card {
@@ -17,6 +24,7 @@
   border-radius: 14px;
   padding: 30px;
   max-width: 900px;
+  animation: scaleIn 0.4s ease both;
 }
 
 .claim-details-card h1 {
@@ -54,6 +62,14 @@
 .claim-status.pending,
 .pending {
   color: #ffc857;
+}
+
+.claim-status {
+  display: block;
+}
+
+.claim-status.pending {
+  animation: pulseBadge 2.2s ease-in-out infinite;
 }
 
 .claim-status.approved,

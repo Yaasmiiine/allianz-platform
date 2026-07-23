@@ -1,6 +1,7 @@
 .admin-claims {
   padding: 20px;
   color: white;
+  animation: fadeSlideUp 0.5s ease both;
 }
 
 .admin-claims h1 {
@@ -10,6 +11,7 @@
 .admin-message {
   margin-bottom: 20px;
   color: #00c2ff;
+  animation: fadeIn 0.3s ease both;
 }
 
 .admin-claims-list {
@@ -23,6 +25,30 @@
   border: 1px solid #1f3b6d;
   border-radius: 12px;
   padding: 20px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  animation: fadeSlideUp 0.45s ease both;
+}
+
+.admin-claim-card:hover {
+  transform: translateY(-4px);
+  border-color: #2a4d85;
+  box-shadow: 0 10px 24px rgba(0, 170, 255, 0.12);
+}
+
+.admin-claims-list .admin-claim-card:nth-child(1) {
+  animation-delay: 0.04s;
+}
+
+.admin-claims-list .admin-claim-card:nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.admin-claims-list .admin-claim-card:nth-child(3) {
+  animation-delay: 0.12s;
+}
+
+.admin-claims-list .admin-claim-card:nth-child(4) {
+  animation-delay: 0.16s;
 }
 
 .admin-claim-card h3 {
@@ -50,6 +76,13 @@
   font-weight: 600;
   background: #00aaff;
   color: #08142b;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.admin-actions button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+  box-shadow: 0 8px 18px rgba(0, 170, 255, 0.25);
 }
 
 .admin-actions .reject-btn {
@@ -67,11 +100,13 @@
   border-radius: 8px;
   font-size: 14px;
   font-weight: bold;
+  display: inline-block;
 }
 
 .status-badge.pending {
   background: rgba(255, 200, 87, 0.15);
   color: #ffc857;
+  animation: pulseBadge 2.2s ease-in-out infinite;
 }
 
 .status-badge.approved {

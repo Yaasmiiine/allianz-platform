@@ -42,18 +42,28 @@
   border-radius: 8px;
   color: white;
   text-decoration: none;
-  transition: 0.2s;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.2s ease;
   min-width: 0;
+}
+
+.link svg {
+  transition: transform 0.25s ease;
 }
 
 .link:hover {
   background: #12264d;
+  transform: translateX(3px);
+}
+
+.link:hover svg {
+  transform: scale(1.1);
 }
 
 .link.active {
   background: #00aaff;
   color: #08142b;
   font-weight: bold;
+  animation: scaleIn 0.25s ease both;
 }
 
 .sidebar.closed span {
@@ -106,6 +116,11 @@
   font-size: 18px;
   font-weight: bold;
   flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.sidebar-user:hover .sidebar-user-avatar {
+  transform: scale(1.08) rotate(-4deg);
 }
 
 .sidebar-user-text {
